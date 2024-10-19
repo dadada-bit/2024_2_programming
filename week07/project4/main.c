@@ -5,7 +5,6 @@
 
 #include <stdio.h>
 
-// 함수 선언
 int get_integer(const char *message);
 int factorial(int n);
 int combination(int n, int r);
