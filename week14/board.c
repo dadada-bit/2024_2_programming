@@ -28,10 +28,16 @@ void board_printBoardStatus(void)
     for (i=0;i<N_BOARD;i++)
     {
         printf("|");
-        if (board_status[i] == BOARDSTATUS_NOK)
+        
+        if (i == shark_position){
+        	printf("X");
+		}
+		
+        else if (board_status[i] == BOARDSTATUS_NOK){
             printf("X");
-        else
+        }else{
             printf("O");
+        }
     }
     printf("|\n");
     printf("------------------------------------------------------------\n");
@@ -41,19 +47,25 @@ void board_printBoardStatus(void)
 
 int board_initBoard(void)
 {
+	srand((unsigned int)time(NULL));
     int i;
     
-    srand((unsigned int)time(NULL));
-
     //variable initialization
     for (i=0;i<N_BOARD;i++)
     {
         board_status[i] = BOARDSTATUS_OK;
         board_coin[i] = 0;
-    //COIN
+    }
+        
+    
+// ----- EX. 5 : shark ------------
+    shark_position = SHARK_INITPOS;
+// ----- EX. 5 : shark ------------
+
+    //coin allocation
     for (i=0;i<N_COINPOS;i++)
     {
-    	while(board_coin[i] == 0])
+    	while(board_coin[i] == 0)
     	{
     		int randomPosition = rand() % N_BOARD;
     		int randomValue = 1 + (rand() % MAX_COIN);
@@ -66,13 +78,6 @@ int board_initBoard(void)
 		}
 	}
     
-// ----- EX. 5 : shark ------------
-    shark_position = SHARK_INITPOS;
-// ----- EX. 5 : shark ------------
-
-    //coin allocation
-   
-    
     return N_COINPOS;
 }
 // ----- EX. 3 : board ------------
@@ -82,7 +87,18 @@ int board_initBoard(void)
 int board_stepShark(void)
 {
 	int step = 1 + (rand() % MAX_SHARKSTEP); // Random step size (1~6)
-    shark_position = (shark_position + step) % N_BOARD; // Update shark position
+    printf("Shark moves %d steps.\n", step);
+    
+    for(int i = 0; i < step; i++){
+    	shark_position = (shark_position + 1) % N_BOARD;
+    	board_status[shark_position] = BOARDSTATUS_NOK;
+    	printf("Shark moved to position %d\n", shark_position);
+	}
+	
+	if (shark_position >= N_BOARD) {
+		shark_position = N_BOARD - 1;
+	}
+
     return shark_position;
 }
 // ----- EX. 5 : shark ------------
@@ -91,6 +107,8 @@ int board_stepShark(void)
 // ----- EX. 3 : board ------------
 int board_getBoardStatus(int pos)
 {
+	if (pos < 0 || pos >= N_BOARD) return BOARDSTATUS_NOK;
+	
     return board_status[pos];
 }
 
@@ -98,6 +116,7 @@ int board_getBoardCoin(int pos)
 {
     int coin = board_coin[pos];
     board_coin[pos] = 0;
+    
     return coin;
 }
 // ----- EX. 3 : board ------------
