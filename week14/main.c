@@ -34,20 +34,6 @@ char player_statusString[3][MAX_CHARNAME] = {"LIVE", "DIE", "END"};
 // ----- EX. 3 : board ------------
 int rolldie(void)
 {
-/*	int pos = 0;
-	
-	board_initBoard();
-	
-	do
-	{
-		board_printBoardStatus();
-		
-		
-		coinResult=board_getBoardCoin(pos);
-	}
-	while */
-	
-	
     return rand()%MAX_DIE+1;
 }
 // ----- EX. 3 : board ------------
@@ -259,17 +245,20 @@ int main(int argc, const char * argv[]) {
         	
         	turn = (turn + 1) % N_PLAYER;
         	
-        	game_end_flag=game_end();
-            } while(game_end()== 0);
-            
-            if (turn == 0) 
-            {
-            	
-        	int shark_pos = board_stepShark();
-        	printf("Shark moved to %d\n", shark_pos);
         	
-        	checkDie(); 					
-			}
+        	
+        if (turn == 0) 
+        {
+        	
+    	int shark_pos = board_stepShark();
+    	printf("Shark moved to %d\n", shark_pos);
+    	
+    	checkDie(); 					
+		}
+    	
+    	game_end_flag=game_end();
+        } while(game_end()== 0);
+            
     
     
 // ----- EX. 6 : game end ------------
